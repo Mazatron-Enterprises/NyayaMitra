@@ -52,10 +52,25 @@ NyayaMitra is designed to parse Indian legal statutes and prepare them for retri
 - Embedded output file: `data/embeddings/chunks_with_embeddings.json`
 - Verified embedding count: **1007** records, with **1005** non-empty embeddings
 
+## Vector Database Setup
+- PostgreSQL with pgvector is now configured via Docker Compose in [docker-compose.yml](docker-compose.yml).
+- The database schema and import script live in [vector_db/init_db.py](vector_db/init_db.py).
+- Example semantic search is available through [vector_db/query_db.py](vector_db/query_db.py).
+
+### Run locally
+1. Start the database container:
+   - `docker compose up -d db`
+2. Install Python dependencies:
+   - `pip install -r requirements.txt`
+3. Import the embedded chunks:
+   - `python vector_db/init_db.py`
+4. Run a sample semantic search:
+   - `python vector_db/query_db.py "defamation"`
+
 ## Next Steps
-- Build a local vector index or vector database for retrieval.
-- Add a search/query interface over the embedded chunks.
-- Develop the final RAG layer for legal question answering.
+- Add a web or CLI interface for legal question answering.
+- Connect the retrieval layer into a RAG pipeline.
+- Expand support for judgments and other legal documents.
 
 ## Notes
 - The repository already contains ingestion/parsing scripts under `ingestion/`.
