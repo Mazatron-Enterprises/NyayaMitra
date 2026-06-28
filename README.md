@@ -14,11 +14,17 @@ NyayaMitra is designed to parse Indian legal statutes and prepare them for retri
      - `bhartiya-sakshya-adhiniyam.json`
 
 2. **Chunking**
-   - A new chunking pipeline was added under `chunking/`.
+   - A chunking pipeline was added under `chunking/`.
    - Core scripts:
      - `chunking/chunk_statutes.py` — chunking logic and metadata preservation
      - `chunking/run_chunking.py` — pipeline entry point
    - Output chunks are saved to `data/embeddings/chunks.json`.
+
+3. **Embedding generation**
+   - An embedding pipeline was added under `embeddings/`.
+   - Core script:
+     - `embeddings/generate_embeddings.py` — generates embeddings with the local BGE-M3 model via Ollama
+   - Embedded output is saved to `data/embeddings/chunks_with_embeddings.json`.
 
 ## Chunking Methodology
 - Each parsed statute section is treated as the primary unit.
@@ -33,17 +39,25 @@ NyayaMitra is designed to parse Indian legal statutes and prepare them for retri
   - `section_title`
 - Chunk IDs follow the pattern: `ACT_S<section>_C<chunk>`.
 
+## Embedding Methodology
+- The local BGE-M3 model is used through Ollama for generating dense vector embeddings.
+- Each chunk is embedded individually and stored with its metadata.
+- Embedding vectors are 1024-dimensional.
+- The output file preserves the original chunk text and metadata alongside the vector.
+
 ## Results So Far
 - Total parsed sections: **886**
 - Total generated chunks: **1007**
 - Embedding input file: `data/embeddings/chunks.json`
+- Embedded output file: `data/embeddings/chunks_with_embeddings.json`
+- Verified embedding count: **1007** records, with **1005** non-empty embeddings
 
 ## Next Steps
-- Generate vector embeddings from `data/embeddings/chunks.json`.
-- Store embeddings in a vector store for retrieval.
-- Build the question-answering / RAG layer on top of the embedded statute chunks.
+- Build a local vector index or vector database for retrieval.
+- Add a search/query interface over the embedded chunks.
+- Develop the final RAG layer for legal question answering.
 
 ## Notes
 - The repository already contains ingestion/parsing scripts under `ingestion/`.
-- Current chunking is focused on statute JSON data only.
+- Current chunking and embedding workflows are focused on statute JSON data only.
 - Future work can add support for judgments and additional legal documents.
